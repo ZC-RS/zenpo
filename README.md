@@ -112,11 +112,11 @@ pip install -e .
 ## Usage
 
 ```bash
-# Show Zenpo info
-python -m zenpo.cli
+# Show info
+zenpo
 
 # Open interactive panel
-python -m zenpo.cli -p
+zenpo -p
 ```
 
 
