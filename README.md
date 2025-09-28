@@ -26,7 +26,7 @@ Clone the repository and install Zenpo in editable mode:
 git clone https://github.com/ZC-RS/zenpo.git
 cd zenpo
 pip install -e .
-
+```
 
 <img width="413" height="316" alt="image" src="https://github.com/user-attachments/assets/9f292d64-950c-479a-a0a9-150c389eb55e" />
 
