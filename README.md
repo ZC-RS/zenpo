@@ -33,5 +33,9 @@ pip install -e .
 | When run 'zenpo' in terminal
 
 
+
+
+
 <img width="339" height="497" alt="image" src="https://github.com/user-attachments/assets/3680e0d8-451a-4881-b296-26eaf72fc1e5" />
+
 | When run 'zenpo -p' in terminal - panel
