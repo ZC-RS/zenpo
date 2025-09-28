@@ -37,7 +37,7 @@ def show_panel():
         "N": ("Open Notepad", ["notepad"]),
         "B": ("Open default Browser", ["start", ""], True),
         "E": ("Open Explorer", ["explorer"]),
-        "M": ("Open Microsoft Store", ["ms-windows-store:"]),
+        "M": ("Open Microsoft Store", ["start", "ms-windows-store:"], True),
         "S": ("Open Settings", ["start", "ms-settings:"], True),
         "H": ("Open Hosts file in Notepad", ["notepad", r"C:\Windows\System32\drivers\etc\hosts"]),
         "L": ("Lock Workstation", ["rundll32.exe", "user32.dll,LockWorkStation"]),
