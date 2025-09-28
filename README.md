@@ -1,6 +1,7 @@
 # Zenpo CLI Panel
 
-A dynamic, text-based control panel for Windows. Inspired by tools like cupp :) [CHECK THEM OUT!!! https://github.com/Mebus/cupp]
+A dynamic, text-based control panel for Windows. Inspired by tools like cupp :)
+[CHECK THEM OUT!!! https://github.com/Mebus/cupp]
 
 ![ASCII Banner](https://raw.githubusercontent.com/ZC-RS/zenpo/main/banner.png) <!-- optional image if you have a screenshot -->
 
