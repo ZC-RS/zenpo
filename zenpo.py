@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import argparse
 import subprocess
-import sys
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 
@@ -23,14 +22,12 @@ def show_main():
     print(Style.BRIGHT + "Help:")
     print("  -p\tShow panel with apps to open")
     print("  zenpo\tShow this text")
-    # add more help lines here as needed
 
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
     print("Press different keys to open apps:\n")
 
-    # Hotkeys mapped to (description, command list)
     hotkeys = {
         "X": ("Exit the panel", None),
         "T": ("Open Task Manager", ["taskmgr"]),
@@ -38,17 +35,23 @@ def show_panel():
         "P": ("Open PowerShell", ["powershell"]),
         "Q": ("Open Control Panel", ["control"]),
         "N": ("Open Notepad", ["notepad"]),
-        "B": ("Open default Browser", ["start", ""], True),  # needs shell=True
+        "B": ("Open default Browser", ["start", ""], True),
         "E": ("Open Explorer", ["explorer"]),
-        "M": ("Open Microsoft Store", ["ms-windows-store:"]),  # URI
+        "M": ("Open Microsoft Store", ["ms-windows-store:"]),
         "S": ("Open Settings", ["start", "ms-settings:"], True),
         "H": ("Open Hosts file in Notepad", ["notepad", r"C:\Windows\System32\drivers\etc\hosts"]),
         "L": ("Lock Workstation", ["rundll32.exe", "user32.dll,LockWorkStation"]),
-        "R": ("Run custom script", ["C:\\path\\to\\yourscript.bat"])
+        "R": ("Run custom script", ["C:\\path\\to\\yourscript.bat"]),
+        "V": ("Open Registry Editor", ["regedit"]),
+        "D": ("Open Event Viewer", ["eventvwr.msc"]),
+        "K": ("Open Task Scheduler", ["taskschd.msc"]),
+        "G": ("Quick Network Test (ping 8.8.8.8)", ["cmd", "/c", "ping 8.8.8.8"]),
+        "F": ("Open Paint", ["mspaint"]),
+        "A": ("Open Calculator", ["calc"]),
+        "Y": ("Search Files", ["explorer", "shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"])
     }
 
-    # Display menu dynamically
-    for key, (desc, cmd, *rest) in hotkeys.items():
+    for key, (desc, *_ ) in hotkeys.items():
         print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
     print()
 
@@ -80,6 +83,3 @@ def main():
         show_panel()
     else:
         show_main()
-
-if __name__ == "__main__":
-    main()
