@@ -8,7 +8,7 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-VERSION = "1.0.0"
+VERSION = "1.2.3"
 CREATOR = "Zenpo"
 REPO = "https://github.com/ZC-RS/zenpo"
 
@@ -23,7 +23,7 @@ def show_main():
     print(Fore.BLUE + f"Version: {VERSION}\n")
     print(Style.BRIGHT + "Help:")
     print("  -p\tShow panel with apps to open")
-    print("  -refresh\tRefresh Zenpo to latest GitHub version")
+    print("  -refresh\tUpdate Zenpo to latest GitHub version")
     print("  zenpo\tShow this text")
 
 def show_panel():
@@ -77,26 +77,28 @@ def show_panel():
             except Exception as e:
                 print(f"Failed to run {desc}: {e}")
 
-def refresh_repo():
-    """Pull latest code from GitHub and reinstall Zenpo."""
-    repo_dir = os.path.dirname(os.path.abspath(__file__))
-    print(Fore.CYAN + "Refreshing Zenpo from GitHub...")
+def refresh_package():
     try:
-        subprocess.run(["git", "-C", repo_dir, "pull"], check=True)
-        print(Fore.CYAN + "Reinstalling updated package...")
-        subprocess.run([sys.executable, "-m", "pip", "install", "-e", repo_dir], check=True)
-        print(Fore.GREEN + "Zenpo has been refreshed successfully!")
-    except subprocess.CalledProcessError as e:
-        print(Fore.RED + f"Failed to refresh Zenpo: {e}")
+        # Locate the package folder
+        import zenpo
+        pkg_dir = os.path.dirname(zenpo.__file__)
+        print(f"Refreshing Zenpo in {pkg_dir}...\n")
+        # Pull latest from GitHub
+        subprocess.run(["git", "pull"], cwd=pkg_dir, check=True)
+        # Reinstall editable package
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", "."], cwd=pkg_dir, check=True)
+        print("\nZenpo has been updated successfully!")
+    except Exception as e:
+        print(f"Failed to refresh Zenpo: {e}")
 
 def main():
     parser = argparse.ArgumentParser(prog="zenpo", add_help=False)
     parser.add_argument("-p", action="store_true", help="Show panel with apps to open")
-    parser.add_argument("-refresh", action="store_true", help="Refresh Zenpo to latest GitHub version")
+    parser.add_argument("-refresh", action="store_true", help="Update Zenpo to latest GitHub version")
     args = parser.parse_args()
 
     if args.refresh:
-        refresh_repo()
+        refresh_package()
     elif args.p:
         show_panel()
     else:
