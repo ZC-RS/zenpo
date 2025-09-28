@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     entry_points={
         "console_scripts": [
-            "zenpo=zenpo:main"
+            "zenpo=zenpo.cli:main"
         ]
     },
     install_requires=[
@@ -14,4 +14,12 @@ setup(
         "colorama"
     ],
     python_requires=">=3.7",
+    description="A general control panel CLI tool",
+    author="Zenpo",
+    url="https://github.com/ZC-RS/zenpo",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: Microsoft :: Windows",
+        "Environment :: Console"
+    ]
 )
