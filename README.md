@@ -1,6 +1,6 @@
 # Zenpo CLI Panel
 
-A dynamic, text-based control panel for Windows. honestly its just a tool for my to hack my school lol
+A dynamic, text-based control panel for Windows. tbf its just a tool to help hack my school
 
 ![ASCII Banner](https://raw.githubusercontent.com/ZC-RS/zenpo/main/banner.png) <!-- optional image if you have a screenshot -->
 
@@ -18,8 +18,11 @@ A dynamic, text-based control panel for Windows. honestly its just a tool for my
 
 ## Installation
 
-1. Clone the repository:
+### Option 1: Local Development Install (Recommended for now)
+
+Clone the repository and install Zenpo in editable mode:
 
 ```bash
 git clone https://github.com/ZC-RS/zenpo.git
 cd zenpo
+pip install -e .
