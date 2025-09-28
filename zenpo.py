@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
 import subprocess
+import sys
+import os
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 
@@ -21,6 +23,7 @@ def show_main():
     print(Fore.BLUE + f"Version: {VERSION}\n")
     print(Style.BRIGHT + "Help:")
     print("  -p\tShow panel with apps to open")
+    print("  -refresh\tRefresh Zenpo to latest GitHub version")
     print("  zenpo\tShow this text")
 
 def show_panel():
@@ -74,12 +77,30 @@ def show_panel():
             except Exception as e:
                 print(f"Failed to run {desc}: {e}")
 
+def refresh_repo():
+    """Pull latest code from GitHub and reinstall Zenpo."""
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    print(Fore.CYAN + "Refreshing Zenpo from GitHub...")
+    try:
+        subprocess.run(["git", "-C", repo_dir, "pull"], check=True)
+        print(Fore.CYAN + "Reinstalling updated package...")
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", repo_dir], check=True)
+        print(Fore.GREEN + "Zenpo has been refreshed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(Fore.RED + f"Failed to refresh Zenpo: {e}")
+
 def main():
     parser = argparse.ArgumentParser(prog="zenpo", add_help=False)
     parser.add_argument("-p", action="store_true", help="Show panel with apps to open")
+    parser.add_argument("-refresh", action="store_true", help="Refresh Zenpo to latest GitHub version")
     args = parser.parse_args()
 
-    if args.p:
+    if args.refresh:
+        refresh_repo()
+    elif args.p:
         show_panel()
     else:
         show_main()
+
+if __name__ == "__main__":
+    main()
