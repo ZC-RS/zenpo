@@ -51,12 +51,136 @@ def show_panel():
         "G": ("Quick Network Test (ping 8.8.8.8)", ["cmd", "/c", "ping 8.8.8.8"]),
         "F": ("Open Paint", ["mspaint"]),
         "A": ("Open Calculator", ["calc"]),
-        "Y": ("Search Files", ["explorer", "shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"])
+        "Y": ("Search Files", ["explorer", "shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"]),
+        "=": ("Show Tree", None)  # New hotkey
     }
 
     for key, (desc, *_ ) in hotkeys.items():
         print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
     print()
+
+    tree_text = r"""
+C:\
+└── users
+    ├── a00157
+    │   ├── year 7 project
+    │   │   ├── intro.docx
+    │   │   ├── experiment_photos.jpg
+    │   │   └── results.xlsx
+    │   ├── science club photos
+    │   │   ├── lab1.png
+    │   │   └── lab2.png
+    │   └── coding practice
+    │       ├── hello_world.py
+    │       └── arrays_task.py
+    ├── a00123
+    │   ├── year 9 rowing
+    │   │   ├── team_list.pdf
+    │   │   └── timings.csv
+    │   └── sports kit list
+    │       └── checklist.docx
+    ├── b00115
+    │   ├── year 8 bandlab
+    │   │   ├── chorus.mp3
+    │   │   └── mixdown.wav
+    │   └── guitar tabs
+    │       └── chords.txt
+    ├── b00184
+    │   ├── year 7 project
+    │   │   ├── plan.docx
+    │   │   └── diagram.png
+    │   └── maths challenge
+    │       └── answers.pdf
+    ├── x00119
+    │   ├── year X subjects (all subjects)
+    │   │   ├── maths.docx
+    │   │   ├── history.docx
+    │   │   └── science.docx
+    │   └── programming club 2024
+    │       └── scratch_game.sb3
+    ├── x00147
+    │   ├── year 8 bandlab
+    │   │   ├── song1.wav
+    │   │   ├── bassline.mp3
+    │   │   └── lyrics.txt
+    ├── y00142
+    │   ├── year 9 rowing
+    │   │   ├── regatta_schedule.pdf
+    │   │   ├── training_log.xlsx
+    │   │   └── safety_rules.docx
+    ├── y00133
+    │   ├── year 7 project
+    │   │   ├── outline.docx
+    │   │   ├── poster.png
+    │   │   └── bibliography.docx
+    │   └── sketches
+    │       ├── sketch1.jpg
+    │       └── sketch2.jpg
+    ├── z00173
+    │   ├── year 8 bandlab
+    │   │   ├── riff.wav
+    │   │   ├── vocal_take.mp3
+    │   │   └── notes.txt
+    ├── z00158
+    │   ├── year X subjects (all subjects)
+    │   │   ├── english.docx
+    │   │   ├── chemistry.docx
+    │   │   └── art.docx
+    │   └── python scripts
+    │       ├── calculator.py
+    │       └── quiz.py
+    ├── u00177
+    │   ├── year 7 project
+    │   │   ├── hypothesis.docx
+    │   │   ├── experiment.jpg
+    │   │   └── conclusion.docx
+    ├── u00124
+    │   ├── year 9 rowing
+    │   │   ├── practice_videos.mp4
+    │   │   └── kit_checklist.docx
+    ├── gareth
+    │   ├── audit logs
+    │   │   ├── 2024.txt
+    │   │   └── flip
+    |   |   └── 2025.txt
+    │   └── others
+    │       └── zenpo_plan.txt
+    ├── garethbuild
+    │   ├── year X subjects (all subjects)
+    │   │   ├── maths.docx
+    │   │   ├── physics.docx
+    │   │   └── dt.docx
+    │   ├── CAD designs
+    │   │   ├── chassis.stl
+    │   │   └── arm.stl
+    │   └── maker fair entry
+    │       ├── entry_form.pdf
+    │       └── photos.png
+    ├── admin
+    │   ├── system scripts
+    │   │   ├── backup.ps1
+    │   │   └── cleanup.bat
+    │   ├── staff-only policies
+    │   │   └── policy2024.pdf
+    │   └── backups
+    │       ├── backup1.zip
+    │       └── backup2.zip
+    └── administrator
+        ├── root-settings
+        │   ├── registry.reg
+        │   └── network.cfg
+        ├── audits
+        │   └── audit2024.pdf
+        ├── security logs
+        │   ├── log1.txt
+        │   └── log2.txt
+        ├── logon
+        │   ├── intro.docx
+        │   └── draft.docx
+        └── network configs
+            ├── router.conf
+            └── firewall.rules
+"""
 
     while True:
         choice = input("Choice: ").strip().upper()
@@ -70,6 +194,9 @@ def show_panel():
         if choice == "X":
             print("Exiting panel.")
             break
+        elif choice == "=":
+            print(tree_text)
+            continue
 
         if cmd:
             try:
