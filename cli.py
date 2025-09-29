@@ -8,7 +8,7 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-VERSION = "1.2.3"
+VERSION = "1.2.4"
 CREATOR = "Zenpo"
 REPO = "https://github.com/ZC-RS/zenpo"
 
