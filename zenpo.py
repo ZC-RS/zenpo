@@ -22,9 +22,9 @@ def show_main():
     print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
     print(Fore.BLUE + f"Version: {VERSION}\n")
     print(Style.BRIGHT + "Help:")
-    print("  -p\tShow panel with apps to open")
-    print("  -refresh\tUpdate Zenpo to latest GitHub version")
-    print("  zenpo\tShow this text")
+    print("        zenpo -p\tShow panel with apps to open")
+    print("        zenpo -refresh\tUpdate Zenpo to latest GitHub version")
+    print("        zenpo\tShow this text")
 
 def launch_game_panel():
     print(ascii_banner("Games [BETA]"))
