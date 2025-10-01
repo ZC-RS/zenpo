@@ -8,7 +8,7 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-VERSION = "1.2.4"
+VERSION = "1.2.5"
 CREATOR = "Zenpo"
 REPO = "https://github.com/ZC-RS/zenpo"
 
@@ -26,12 +26,91 @@ def show_main():
     print("  -refresh\tUpdate Zenpo to latest GitHub version")
     print("  zenpo\tShow this text")
 
+def launch_game_panel():
+    print(ascii_banner("Games [BETA]"))
+    print(Fore.BLUE + Style.BRIGHT + "Version 1\n")
+    print("A game console in the terminal for students to play without a history :)\n")
+    print("[S] Space Shooting Game 🚀 [W.I.P]")
+    print("[A] Among Us [SUS]")
+    print("[I] Interactive Chat 💬 [ALPHA]\n")
+
+    choice = input("Choice: ").strip().lower()
+    if choice == "s":
+        space_shooting_game()
+    else:
+        print("Coming soon or not implemented yet!")
+
+def space_shooting_game():
+    import curses
+    import random
+    import time
+
+    def main(stdscr):
+        curses.curs_set(0)
+        stdscr.nodelay(True)
+        sh, sw = stdscr.getmaxyx()
+        player_x, player_y = sw//2, sh-2
+        bullets = []
+        enemies = [{"x": random.randint(1, sw-2), "y": 1, "health": 2} for _ in range(5)]
+        score = 0
+        wave = 1
+
+        while True:
+            stdscr.clear()
+            key = stdscr.getch()
+
+            if key == curses.KEY_LEFT and player_x > 1:
+                player_x -= 1
+            elif key == curses.KEY_RIGHT and player_x < sw-2:
+                player_x += 1
+            elif key == ord(" "):
+                bullets.append({"x": player_x, "y": player_y-1})
+
+            for b in bullets[:]:
+                b["y"] -= 1
+                if b["y"] < 0:
+                    bullets.remove(b)
+
+            for e in enemies[:]:
+                e["y"] += 0.1
+                for b in bullets:
+                    if int(b["x"]) == int(e["x"]) and int(b["y"]) == int(e["y"]):
+                        e["health"] -= 1
+                        if b in bullets:
+                            bullets.remove(b)
+                        if e["health"] <= 0:
+                            enemies.remove(e)
+                            score += 10
+                        break
+                if int(e["x"]) == player_x and int(e["y"]) == player_y:
+                    stdscr.addstr(sh//2, sw//2-5, "GAME OVER", curses.A_BOLD)
+                    stdscr.refresh()
+                    time.sleep(2)
+                    return
+
+            if not enemies:
+                wave += 1
+                enemies = [{"x": random.randint(1, sw-2), "y": 1, "health": wave} for _ in range(5 + wave)]
+
+            stdscr.addstr(player_y, player_x, "^")
+            for b in bullets:
+                stdscr.addstr(int(b["y"]), int(b["x"]), "|")
+            for e in enemies:
+                stdscr.addstr(int(e["y"]), int(e["x"]), "V")
+
+            stdscr.addstr(0, 2, f"Score: {score} Wave: {wave}")
+            stdscr.refresh()
+            time.sleep(0.05)
+
+    curses.wrapper(main)
+
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
     print("Press different keys to open apps:\n")
 
     hotkeys = {
+        "GM": ("Interactive Game Mode [BOLD][BETA]", None),
         "X": ("Exit the panel", None),
         "T": ("Open Task Manager", ["taskmgr"]),
         "C": ("Open CMD", ["cmd"]),
@@ -52,7 +131,7 @@ def show_panel():
         "F": ("Open Paint", ["mspaint"]),
         "A": ("Open Calculator", ["calc"]),
         "Y": ("Search Files", ["explorer", "shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"]),
-        "=": ("Show Tree", None)  # New hotkey
+        "=": ("Show Tree", None)
     }
 
     for key, (desc, *_ ) in hotkeys.items():
@@ -194,6 +273,9 @@ C:\
         if choice == "X":
             print("Exiting panel.")
             break
+        elif choice == "GM":
+            launch_game_panel()
+            break
         elif choice == "=":
             print(tree_text)
             continue
@@ -206,13 +288,10 @@ C:\
 
 def refresh_package():
     try:
-        # Locate the package folder
         import zenpo
         pkg_dir = os.path.dirname(zenpo.__file__)
         print(f"Refreshing Zenpo in {pkg_dir}...\n")
-        # Pull latest from GitHub
         subprocess.run(["git", "pull"], cwd=pkg_dir, check=True)
-        # Reinstall editable package
         subprocess.run([sys.executable, "-m", "pip", "install", "-e", "."], cwd=pkg_dir, check=True)
         print("\nZenpo has been updated successfully!")
     except Exception as e:
