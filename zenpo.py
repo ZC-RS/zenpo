@@ -423,7 +423,20 @@ def launch_game_panel():
     elif choice=='6': game_2048()
     else: print("Unknown choice")
 
-# -------------------- Control Panel ----------------------------------------------------------------------------------------------------
+# -------------------- WhatsApp Messaging --------------------
+def whatsapp_message():
+    print("=== WhatsApp Messaging Feature ===")
+    phone = input("Enter recipient phone number (with country code): ").strip()
+    msg = input("Enter message to send: ").strip()
+    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
+    try:
+        import pywhatkit
+        pywhatkit.sendwhatmsg_instantly(phone, msg)
+        print("Message sent!")
+    except Exception as e:
+        print(f"Failed to send message: {e}")
+
+# -------------------- Control Panel --------------------
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
@@ -455,10 +468,6 @@ def show_panel():
         "=": ("Credits", None)
     }
 
-    for key, (desc, *_ ) in hotkeys.items():
-        print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
-    print()
-
     tree_text = r"""
 ==================== ZENPO CREDITS ====================
 
@@ -475,35 +484,32 @@ Email any suggestions to: zenpo.a00137@gmail.com
 ========================================================
 """
 
-# -------------------- WhatsApp Messaging --------------------
-def whatsapp_message():
-    print("=== WhatsApp Messaging Feature ===")
-    phone = input("Enter recipient phone number (with country code): ")
-    msg = input("Enter message to send: ")
-    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
-    try:
-        import pywhatkit
-        pywhatkit.sendwhatmsg_instantly(phone, msg)
-        print("Message sent!")
-    except Exception as e:
-        print(f"Failed to send message: {e}")
+    # Display hotkeys
+    for key, (desc, *_) in hotkeys.items():
+        print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
+    print()
 
-# -------------------- Control Panel --------------------
-def show_panel():
-    ...
+    # Main input loop
     while True:
         choice = input("Choice: ").strip().upper()
+        if choice not in hotkeys:
+            print("Unknown option")
+            continue
+
+        desc, cmd, *rest = hotkeys[choice]
+        shell_flag = rest[0] if rest else False
+
         if choice == "W":
             whatsapp_message()
-            break
         elif choice == "GM":
             launch_game_panel()
-            break
         elif choice == "=":
             print(tree_text)
             continue
-
-        if cmd:
+        elif choice == "X":
+            print("Exiting panel...")
+            break
+        elif cmd:
             try:
                 subprocess.run(cmd, shell=shell_flag)
             except Exception as e:
