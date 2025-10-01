@@ -1,20 +1,16 @@
-# Zenpo CLI
+# Zenpo
 
-A simple, interactive command-line control panel for Windows.
+A simple, interactive sorta control panel? idk use it for school hehe
 
 ---
 
 ## Features
 
-### 1. Banner & Info
-
-Run:
+### Run
 
 ```bash
-python -m zenpo.cli
+zenpo
 ```
-
-(or eventually `zenpo` once installed globally)
 
 Displays:
 
@@ -40,10 +36,9 @@ Displays:
 Run:
 
 ```bash
-python -m zenpo.cli -p
+zenpo -p
 ```
 
-(or `zenpo -p` when installed globally)
 
 - **ASCII Banner:** `PANEL` in green  
 - **Description:** “A general control panel for apps” (light blue)  
