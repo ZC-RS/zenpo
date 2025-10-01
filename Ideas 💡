@@ -1,3 +1,41 @@
 ## Ideas 💡
 
 ▢ Interactive Games inside
+
+Battleship
+
+Two-player, place ships, guess coordinates.
+
+Can implement AI opponent for single-player.
+
+Snake
+
+Moves around, eats “food”, grows longer, dies if it hits walls or itself.
+
+Very simple to implement in Python with curses.
+
+Tetris
+
+Falling blocks, rotate with keys, line-clearing mechanics.
+
+Classic, addictive, and can use just ASCII characters.
+
+Minesweeper
+
+Grid of numbers and mines.
+
+Players flag mines, uncover tiles.
+
+Perfect for text input (w, a, s, d, or numbers for coordinates).
+
+Hangman
+
+Guess letters of a hidden word.
+
+Easy to implement, scalable for difficulty.
+
+2048
+
+Merge numbers on a grid using arrow keys.
+
+Surprisingly fun in a terminal with just ASCII numbers.
