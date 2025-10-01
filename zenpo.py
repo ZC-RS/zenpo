@@ -423,6 +423,20 @@ def launch_game_panel():
     elif choice=='6': game_2048()
     else: print("Unknown choice")
 
+# -------------------- WhatsApp Messaging --------------------
+def whatsapp_message():
+    print("=== WhatsApp Messaging Feature ===")
+    phone = input("Enter recipient phone number (with country code): ")
+    msg = input("Enter message to send: ")
+    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
+    # Here you could integrate pywhatkit or another library
+    try:
+        import pywhatkit
+        pywhatkit.sendwhatmsg_instantly(phone, msg)
+        print("Message sent!")
+    except Exception as e:
+        print(f"Failed to send message: {e}")
+
 # -------------------- Control Panel ----------------------------------------------------------------------------------------------------
 def show_panel():
     print(ascii_banner("PANEL"))
@@ -540,16 +554,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# -------------------- WhatsApp Messaging --------------------
-def whatsapp_message():
-    print("=== WhatsApp Messaging Feature ===")
-    phone = input("Enter recipient phone number (with country code): ")
-    msg = input("Enter message to send: ")
-    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
-    # Here you could integrate pywhatkit or another library
-    try:
-        import pywhatkit
-        pywhatkit.sendwhatmsg_instantly(phone, msg)
-        print("Message sent!")
-    except Exception as e:
-        print(f"Failed to send message: {e}")
+
