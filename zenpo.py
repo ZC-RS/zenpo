@@ -475,16 +475,24 @@ Email any suggestions to: zenpo.a00137@gmail.com
 ========================================================
 """
 
+# -------------------- WhatsApp Messaging --------------------
+def whatsapp_message():
+    print("=== WhatsApp Messaging Feature ===")
+    phone = input("Enter recipient phone number (with country code): ")
+    msg = input("Enter message to send: ")
+    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
+    try:
+        import pywhatkit
+        pywhatkit.sendwhatmsg_instantly(phone, msg)
+        print("Message sent!")
+    except Exception as e:
+        print(f"Failed to send message: {e}")
 
+# -------------------- Control Panel --------------------
+def show_panel():
+    ...
     while True:
         choice = input("Choice: ").strip().upper()
-        if choice not in hotkeys:
-            print("Unknown option")
-            continue
-
-        desc, cmd, *rest = hotkeys[choice]
-        shell_flag = rest[0] if rest else False
-
         if choice == "W":
             whatsapp_message()
             break
@@ -539,17 +547,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# -------------------- WhatsApp Messaging --------------------
-def whatsapp_message():
-    print("=== WhatsApp Messaging Feature ===")
-    phone = input("Enter recipient phone number (with country code): ")
-    msg = input("Enter message to send: ")
-    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
-    # Here you could integrate pywhatkit or another library
-    try:
-        import pywhatkit
-        pywhatkit.sendwhatmsg_instantly(phone, msg)
-        print("Message sent!")
-    except Exception as e:
-        print(f"Failed to send message: {e}")
