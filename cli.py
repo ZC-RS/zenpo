@@ -404,7 +404,7 @@ def game_2048():
         clock.tick(30)
     pygame.quit()
 
-# -------------------- Game Panel --------------------
+# -------------------- Game Panel ------------------------------------------
 def launch_game_panel():
     print(ascii_banner("Games [V2]"))
     print("[1] Snake")
@@ -423,14 +423,15 @@ def launch_game_panel():
     elif choice=='6': game_2048()
     else: print("Unknown choice")
 
-# -------------------- Control Panel --------------------
+# -------------------- Control Panel ----------------------------------------------------------------------------------------------------
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
     print("Press different keys to open apps:\n")
 
     hotkeys = {
-        "GM": ("Interactive Game Mode [V2]", None),
+        "GM": ("Interactive Game Mode [V2-BETA]", None),
+        "W": ("Send Message [NEW]", None),
         "X": ("Exit the panel", None),
         "T": ("Open Task Manager", ["taskmgr"]),
         "C": ("Open CMD", ["cmd"]),
@@ -443,7 +444,7 @@ def show_panel():
         "S": ("Open Settings", ["start", "ms-settings:"], True),
         "H": ("Open Hosts file in Notepad", ["notepad", r"C:\Windows\System32\drivers\etc\hosts"]),
         "L": ("Lock Workstation", ["rundll32.exe", "user32.dll,LockWorkStation"]),
-        "R": ("Run custom script", ["C:\\path\\to\\yourscript.bat"]),
+        "R": ("Run custom script [NOT FUNCTIONAL]", ["C:\\path\\to\\yourscript.bat"]),
         "V": ("Open Registry Editor", ["regedit"]),
         "D": ("Open Event Viewer", ["eventvwr.msc"]),
         "K": ("Open Task Scheduler", ["taskschd.msc"]),
@@ -451,14 +452,29 @@ def show_panel():
         "F": ("Open Paint", ["mspaint"]),
         "A": ("Open Calculator", ["calc"]),
         "Y": ("Search Files", ["explorer", "shell:::{2559a1f3-21d7-11d4-bdaf-00c04f60b9f0}"]),
-        "=": ("Show Tree", None)
+        "=": ("Credits", None)
     }
 
     for key, (desc, *_ ) in hotkeys.items():
         print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
     print()
 
-    tree_text = r""" ... """
+    tree_text = r"""
+==================== ZENPO CREDITS ====================
+
+Creator: Zenpo (a00137)
+GitHub Repo: https://github.com/ZC-RS/zenpo
+
+Installation:
+pip install zenpo       [CURRENT]
+pip install phazegod    [BETA]
+pip install drizzydrake [COMING]
+
+Email any suggestions to: zenpo.a00137@gmail.com
+
+========================================================
+"""
+
 
     while True:
         choice = input("Choice: ").strip().upper()
@@ -469,8 +485,8 @@ def show_panel():
         desc, cmd, *rest = hotkeys[choice]
         shell_flag = rest[0] if rest else False
 
-        if choice == "X":
-            print("Exiting panel.")
+        if choice == "W":
+        whatsapp_message()
             break
         elif choice == "GM":
             launch_game_panel()
@@ -523,3 +539,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# -------------------- WhatsApp Messaging --------------------
+def whatsapp_message():
+    print("=== WhatsApp Messaging Feature ===")
+    phone = input("Enter recipient phone number (with country code): ")
+    msg = input("Enter message to send: ")
+    print(f"Simulating sending WhatsApp message to {phone}: {msg}")
+    # Here you could integrate pywhatkit or another library
+    try:
+        import pywhatkit
+        pywhatkit.sendwhatmsg_instantly(phone, msg)
+        print("Message sent!")
+    except Exception as e:
+        print(f"Failed to send message: {e}")
