@@ -3,14 +3,14 @@ import argparse
 import subprocess
 import sys
 import os
+import pygame
 import random
-import time
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-VERSION = "2.2.0"
+VERSION = "2.0.0"
 CREATOR = "Zenpo"
 REPO = "https://github.com/ZC-RS/zenpo"
 
@@ -18,339 +18,175 @@ def ascii_banner(text, colour=Fore.GREEN):
     f = Figlet(font='slant')
     return colour + f.renderText(text)
 
-def show_main():
-    print(ascii_banner("Zenpo"))
-    print(Fore.GREEN + f"Creator: {CREATOR}")
-    print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
-    print(Fore.BLUE + f"Version: {VERSION}\n")
-    print(Style.BRIGHT + "Help:")
-    print("        zenpo -p\tShow panel with apps to open")
-    print("        zenpo -refresh\tUpdate Zenpo to latest GitHub version")
-    print("        zenpo\tShow this text")
+# -------------------- GAMES --------------------
+def snake_game():
+    pygame.init()
+    WIDTH, HEIGHT = 600, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Snake")
+    clock = pygame.time.Clock()
+
+    block = 20
+    snake = [(WIDTH//2, HEIGHT//2)]
+    direction = (0, 0)
+    food = (random.randrange(0, WIDTH, block), random.randrange(0, HEIGHT, block))
+    score = 0
+
+    running = True
+    while running:
+        clock.tick(10)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP: direction = (0, -block)
+                if event.key == pygame.K_DOWN: direction = (0, block)
+                if event.key == pygame.K_LEFT: direction = (-block, 0)
+                if event.key == pygame.K_RIGHT: direction = (block, 0)
+
+        if direction != (0, 0):
+            new_head = (snake[0][0]+direction[0], snake[0][1]+direction[1])
+            if new_head in snake or not (0 <= new_head[0] < WIDTH and 0 <= new_head[1] < HEIGHT):
+                break
+            snake.insert(0, new_head)
+            if new_head == food:
+                food = (random.randrange(0, WIDTH, block), random.randrange(0, HEIGHT, block))
+                score += 1
+            else:
+                snake.pop()
+
+        screen.fill((0,0,0))
+        for s in snake: pygame.draw.rect(screen, (0,255,0), (*s, block, block))
+        pygame.draw.rect(screen, (255,0,0), (*food, block, block))
+        pygame.display.flip()
+
+    pygame.quit()
+
+def battleship_game():
+    pygame.init()
+    WIDTH, HEIGHT = 600, 600
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Battleship")
+    clock = pygame.time.Clock()
+
+    grid_size = 10
+    cell = WIDTH // grid_size
+    ship = [(random.randint(0,9), random.randint(0,9))]
+    hits = []
+
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((0,0,64))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                gx, gy = x//cell, y//cell
+                if (gx, gy) in ship: hits.append((gx,gy))
+
+        for i in range(grid_size):
+            for j in range(grid_size):
+                rect = pygame.Rect(i*cell, j*cell, cell, cell)
+                pygame.draw.rect(screen, (0,128,128), rect, 1)
+                if (i,j) in hits: pygame.draw.rect(screen, (255,0,0), rect)
+        pygame.display.flip()
+        clock.tick(30)
+
+    pygame.quit()
+
+def tetris_game():
+    pygame.init()
+    WIDTH, HEIGHT = 200, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Tetris")
+    clock = pygame.time.Clock()
+
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((0,0,0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Tetris Placeholder", True, (255,255,255))
+        screen.blit(text, (20, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+
+    pygame.quit()
+
+def minesweeper_game():
+    pygame.init()
+    WIDTH, HEIGHT = 400, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Minesweeper")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((192,192,192))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Minesweeper Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+    pygame.quit()
+
+def hangman_game():
+    pygame.init()
+    WIDTH, HEIGHT = 400, 300
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Hangman")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 36)
+    running = True
+    while running:
+        screen.fill((255,255,255))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Hangman Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+    pygame.quit()
+
+def game_2048():
+    pygame.init()
+    WIDTH, HEIGHT = 400, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("2048")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 36)
+    running = True
+    while running:
+        screen.fill((255,255,255))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("2048 Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
 
 # -------------------- GAME PANEL --------------------
 def launch_game_panel():
     print(ascii_banner("Games [V2]"))
-    print(Fore.BLUE + Style.BRIGHT + "Version 2 - Script by a00137\n")
-    print("A game console in the terminal for students to play without a history :)\n")
-    print("[B] Battleship")
-    print("[S] Snake")
-    print("[T] Tetris")
-    print("[M] Minesweeper")
-    print("[H] Hangman")
-    print("[2] 2048\n")
+    print("[1] Snake")
+    print("[2] Battleship")
+    print("[3] Tetris")
+    print("[4] Minesweeper")
+    print("[5] Hangman")
+    print("[6] 2048")
 
-    choice = input("Choice: ").strip().lower()
-    if choice == "b":
-        battleship()
-    elif choice == "s":
-        snake()
-    elif choice == "t":
-        tetris()
-    elif choice == "m":
-        minesweeper()
-    elif choice == "h":
-        hangman()
-    elif choice == "2":
-        game_2048()
-    else:
-        print("Unknown choice!")
+    choice = input("Select a game: ").strip()
+    if choice=='1': snake_game()
+    elif choice=='2': battleship_game()
+    elif choice=='3': tetris_game()
+    elif choice=='4': minesweeper_game()
+    elif choice=='5': hangman_game()
+    elif choice=='6': game_2048()
+    else: print("Unknown choice")
 
-# -------------------- BATTLESHIP --------------------
-def battleship():
-    print(ascii_banner("Battleship", Fore.CYAN))
-    size = 5
-    player_board = [['~']*size for _ in range(size)]
-    ai_board = [['~']*size for _ in range(size)]
-
-    def print_board(board, hide_ships=False):
-        print("  " + " ".join(str(i) for i in range(size)))
-        for y, row in enumerate(board):
-            display_row = []
-            for x, cell in enumerate(row):
-                if hide_ships and cell == "S":
-                    display_row.append("~")
-                else:
-                    display_row.append(cell)
-            print(str(y) + " " + " ".join(display_row))
-
-    def place_ship(board):
-        x, y = random.randint(0, size-1), random.randint(0, size-1)
-        board[y][x] = "S"
-        return (x, y)
-
-    ai_ship = place_ship(ai_board)
-    player_ship = place_ship(player_board)
-
-    print("Your board:")
-    print_board(player_board)
-    print("\nAttack the AI ship!")
-
-    while True:
-        # Player turn
-        try:
-            coords = input("Enter attack coordinates x y: ").split()
-            if len(coords) != 2: continue
-            x, y = map(int, coords)
-            if ai_board[y][x] == "S":
-                print("Hit! You sunk the AI's ship! 🎉")
-                break
-            else:
-                print("Miss!")
-                ai_board[y][x] = "X"
-        except:
-            print("Invalid input.")
-
-        # AI turn
-        while True:
-            ai_x, ai_y = random.randint(0, size-1), random.randint(0, size-1)
-            if player_board[ai_y][ai_x] not in ["X", "H"]:
-                if player_board[ai_y][ai_x] == "S":
-                    print(f"AI hit your ship at ({ai_x},{ai_y})! You lost! 💥")
-                    return
-                else:
-                    player_board[ai_y][ai_x] = "X"
-                    print(f"AI missed at ({ai_x},{ai_y})")
-                    break
-
-        print("Current player board:")
-        print_board(player_board)
-
-# -------------------- SNAKE --------------------
-def snake():
-    print(ascii_banner("Snake", Fore.YELLOW))
-    import curses
-
-    def play(stdscr):
-        curses.curs_set(0)
-        h, w = 20, 40
-        win = curses.newwin(h, w, 0, 0)
-        win.keypad(1)
-        win.timeout(100)
-
-        snk_x = w//4
-        snk_y = h//2
-        snake = [[snk_y, snk_x]]
-        food = [h//2, w//2]
-        win.addch(food[0], food[1], curses.ACS_PI)
-
-        key = curses.KEY_RIGHT
-        score = 0
-
-        while True:
-            next_key = win.getch()
-            key = key if next_key == -1 else next_key
-
-            head = snake[-1][:]
-            if key == curses.KEY_DOWN: head[0] += 1
-            if key == curses.KEY_UP: head[0] -= 1
-            if key == curses.KEY_LEFT: head[1] -= 1
-            if key == curses.KEY_RIGHT: head[1] += 1
-
-            if head in snake or head[0] in [0, h-1] or head[1] in [0, w-1]:
-                msg = f"GAME OVER! Score: {score}"
-                win.addstr(h//2, w//2 - len(msg)//2, msg)
-                win.refresh()
-                win.getch()
-                break
-
-            snake.append(head)
-            if head == food:
-                score += 1
-                food = None
-                while food is None:
-                    nf = [random.randint(1, h-2), random.randint(1, w-2)]
-                    food = nf if nf not in snake else None
-                win.addch(food[0], food[1], curses.ACS_PI)
-            else:
-                tail = snake.pop(0)
-                win.addch(tail[0], tail[1], ' ')
-
-            win.addch(head[0], head[1], curses.ACS_CKBOARD)
-
-    curses.wrapper(play)
-
-# -------------------- TETRIS --------------------
-def tetris():
-    print(ascii_banner("Tetris", Fore.MAGENTA))
-    print("Play Tetris using w/a/s/d (ASCII version)")
-    import curses
-
-    shapes = [
-        [[1,1,1,1]],       # I
-        [[1,1],[1,1]],     # O
-        [[0,1,0],[1,1,1]], # T
-        [[1,1,0],[0,1,1]], # S
-        [[0,1,1],[1,1,0]]  # Z
-    ]
-
-    def rotate(shape):
-        return [list(row)[::-1] for row in zip(*shape)]
-
-    def play(stdscr):
-        curses.curs_set(0)
-        h, w = 20, 10
-        board = [[0]*w for _ in range(h)]
-        key = -1
-        current_shape = random.choice(shapes)
-        x, y = w//2-len(current_shape[0])//2, 0
-
-        def draw():
-            stdscr.clear()
-            for r in range(h):
-                for c in range(w):
-                    if board[r][c]:
-                        stdscr.addstr(r, c*2, "[]")
-            for r in range(len(current_shape)):
-                for c in range(len(current_shape[0])):
-                    if current_shape[r][c]:
-                        if 0<=y+r<h and 0<=x+c<w:
-                            stdscr.addstr(y+r, (x+c)*2, "[]")
-            stdscr.refresh()
-
-        while True:
-            draw()
-            time.sleep(0.2)
-            new_y = y+1
-            collision = False
-            for r in range(len(current_shape)):
-                for c in range(len(current_shape[0])):
-                    if current_shape[r][c]:
-                        if new_y+r>=h or board[new_y+r][x+c]:
-                            collision = True
-            if collision:
-                for r in range(len(current_shape)):
-                    for c in range(len(current_shape[0])):
-                        if current_shape[r][c]:
-                            board[y+r][x+c] = 1
-                current_shape = random.choice(shapes)
-                x, y = w//2-len(current_shape[0])//2, 0
-                if any(board[0]):
-                    stdscr.addstr(h//2, 0, "GAME OVER")
-                    stdscr.getch()
-                    break
-            else:
-                y += 1
-
-            try:
-                key = stdscr.getch()
-                if key == ord('a'): x-=1
-                if key == ord('d'): x+=1
-                if key == ord('s'): y+=1
-                if key == ord('w'): current_shape = rotate(current_shape)
-            except:
-                pass
-
-    curses.wrapper(play)
-
-# -------------------- MINESWEEPER --------------------
-def minesweeper():
-    print(ascii_banner("Minesweeper", Fore.RED))
-    size = 5
-    mines = [(random.randint(0,size-1), random.randint(0,size-1)) for _ in range(3)]
-    board = [[' ']*size for _ in range(size)]
-
-    def print_board():
-        print("  " + " ".join(str(i) for i in range(size)))
-        for idx, row in enumerate(board):
-            print(str(idx) + " " + " ".join(row))
-
-    while True:
-        print_board()
-        move = input("Enter coordinates x y: ").split()
-        if len(move) != 2: continue
-        x, y = map(int, move)
-        if (x,y) in mines:
-            print("BOOM! You hit a mine 💥")
-            break
-        else:
-            board[y][x] = '0'
-        if all(board[y][x]!=' ' for y in range(size) for x in range(size) if (x,y) not in mines):
-            print("You cleared the board! 🎉")
-            break
-
-# -------------------- HANGMAN --------------------
-def hangman():
-    print(ascii_banner("Hangman", Fore.GREEN))
-    words = ["python","terminal","zenpo","hangman","battleship","snake"]
-    word = random.choice(words)
-    guessed = set()
-    attempts = 6
-
-    while attempts > 0:
-        display = [c if c in guessed else '_' for c in word]
-        print(" ".join(display))
-        if '_' not in display:
-            print("You won! 🎉")
-            break
-        guess = input("Guess a letter: ").lower()
-        if guess in guessed: continue
-        if guess in word:
-            guessed.add(guess)
-        else:
-            guessed.add(guess)
-            attempts -= 1
-            print(f"Wrong! Attempts left: {attempts}")
-    if attempts == 0:
-        print(f"You lost! The word was: {word}")
-
-# -------------------- 2048 --------------------
-def game_2048():
-    print(ascii_banner("2048", Fore.BLUE))
-    size = 4
-    board = [[0]*size for _ in range(size)]
-
-    def add_tile():
-        empty = [(r,c) for r in range(size) for c in range(size) if board[r][c]==0]
-        if empty:
-            r,c = random.choice(empty)
-            board[r][c] = 2 if random.random()<0.9 else 4
-
-    def print_board():
-        for row in board:
-            print("\t".join(str(num) if num!=0 else '.' for num in row))
-        print()
-
-    def move_left():
-        changed = False
-        for r in range(size):
-            new_row = [i for i in board[r] if i!=0]
-            for i in range(len(new_row)-1):
-                if new_row[i]==new_row[i+1]:
-                    new_row[i]*=2
-                    new_row[i+1]=0
-            new_row = [i for i in new_row if i!=0]
-            new_row += [0]*(size-len(new_row))
-            if new_row != board[r]:
-                changed = True
-                board[r] = new_row
-        return changed
-
-    def rotate():
-        return [list(x)[::-1] for x in zip(*board)]
-
-    add_tile()
-    add_tile()
-    while True:
-        print_board()
-        move = input("Move (w/a/s/d): ").lower()
-        changed = False
-        if move=='a': changed = move_left()
-        elif move=='d': board[:] = rotate(rotate(board)); changed = move_left(); board[:] = rotate(rotate(board))
-        elif move=='w': board[:] = rotate(board); changed = move_left(); board[:] = rotate(rotate(rotate(board)))
-        elif move=='s': board[:] = rotate(rotate(rotate(board))); changed = move_left(); board[:] = rotate(board)
-        else: print("Invalid move"); continue
-        if changed: add_tile()
-        if any(2048 in row for row in board): print_board(); print("You reached 2048! 🎉"); break
-        if all(board[r][c]!=0 for r in range(size) for c in range(size)) and not any(
-            board[r][c]==board[r][c+1] for r in range(size) for c in range(size-1)
-        ) and not any(board[r][c]==board[r+1][c] for r in range(size-1) for c in range(size)):
-            print_board()
-            print("Game Over!")
-            break
-    input("Press Enter to return...")
-
-# -------------------- Control Panel --------------------
+# -------------------- CONTROL PANEL --------------------
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
@@ -385,7 +221,7 @@ def show_panel():
         print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
     print()
 
-    tree_text = r""" ... """  # keep existing tree if needed
+    tree_text = r""" ... """
 
     while True:
         choice = input("Choice: ").strip().upper()
@@ -412,8 +248,7 @@ def show_panel():
             except Exception as e:
                 print(f"Failed to run {desc}: {e}")
 
-
-# -------------------- REFRESH --------------------
+# -------------------- PACKAGE REFRESH --------------------
 def refresh_package():
     try:
         import zenpo
@@ -426,10 +261,20 @@ def refresh_package():
         print(f"Failed to refresh Zenpo: {e}")
 
 # -------------------- MAIN --------------------
+def show_main():
+    print(ascii_banner("Zenpo"))
+    print(Fore.GREEN + f"Creator: {CREATOR}")
+    print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
+    print(Fore.BLUE + f"Version: {VERSION}\n")
+    print(Style.BRIGHT + "Help:")
+    print("        zenpo -p\tShow panel with apps to open")
+    print("        zenpo -refresh\tUpdate Zenpo to latest GitHub version")
+    print("        zenpo\tShow this text")
+
 def main():
     parser = argparse.ArgumentParser(prog="zenpo", add_help=False)
-    parser.add_argument("-p", action="store_true", help="Show panel with apps")
-    parser.add_argument("-refresh", action="store_true", help="Update Zenpo")
+    parser.add_argument("-p", action="store_true", help="Show panel with apps to open")
+    parser.add_argument("-refresh", action="store_true", help="Update Zenpo to latest GitHub version")
     args = parser.parse_args()
 
     if args.refresh:
