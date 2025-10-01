@@ -486,7 +486,7 @@ Email any suggestions to: zenpo.a00137@gmail.com
         shell_flag = rest[0] if rest else False
 
         if choice == "W":
-        whatsapp_message()
+            whatsapp_message()
             break
         elif choice == "GM":
             launch_game_panel()
