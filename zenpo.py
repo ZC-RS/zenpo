@@ -3,7 +3,6 @@ import argparse
 import subprocess
 import sys
 import os
-import pygame
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 
