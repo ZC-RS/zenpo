@@ -3,6 +3,8 @@ import argparse
 import subprocess
 import sys
 import os
+import pygame
+import random
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 
@@ -16,76 +18,175 @@ def ascii_banner(text, colour=Fore.GREEN):
     f = Figlet(font='slant')
     return colour + f.renderText(text)
 
-def show_main():
-    print(ascii_banner("Zenpo"))
-    print(Fore.GREEN + f"Creator: {CREATOR}")
-    print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
-    print(Fore.BLUE + f"Version: {VERSION}\n")
-    print(Style.BRIGHT + "Help:")
-    print("        zenpo -p\tShow panel with apps to open")
-    print("        zenpo -refresh\tUpdate Zenpo to latest GitHub version")
-    print("        zenpo\tShow this text")
+# -------------------- GAMES --------------------
+def snake_game():
+    pygame.init()
+    WIDTH, HEIGHT = 600, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Snake")
+    clock = pygame.time.Clock()
 
-# -------------------- Game Panel --------------------
-def launch_game_panel():
-    print(ascii_banner("Games [V2]"))
-    print(Fore.BLUE + Style.BRIGHT + "Version 2 - Script by a00137\n")
-    print("A game console in the terminal for students to play without a history :)\n")
-    print("[B] Battleship")
-    print("[S] Snake")
-    print("[T] Tetris")
-    print("[M] Minesweeper")
-    print("[H] Hangman")
-    print("[2] 2048\n")
+    block = 20
+    snake = [(WIDTH//2, HEIGHT//2)]
+    direction = (0, 0)
+    food = (random.randrange(0, WIDTH, block), random.randrange(0, HEIGHT, block))
+    score = 0
 
-    choice = input("Choice: ").strip().lower()
-    if choice == "b":
-        battleship()
-    elif choice == "s":
-        snake()
-    elif choice == "t":
-        tetris()
-    elif choice == "m":
-        minesweeper()
-    elif choice == "h":
-        hangman()
-    elif choice == "2":
-        game_2048()
-    else:
-        print("Unknown choice or not implemented yet!")
+    running = True
+    while running:
+        clock.tick(10)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP: direction = (0, -block)
+                if event.key == pygame.K_DOWN: direction = (0, block)
+                if event.key == pygame.K_LEFT: direction = (-block, 0)
+                if event.key == pygame.K_RIGHT: direction = (block, 0)
 
-# -------------------- Placeholder Games --------------------
-def battleship():
-    print(ascii_banner("Battleship", Fore.CYAN))
-    print("Two-player game: place ships and guess coordinates.")
-    input("Press Enter to return to the game panel...")
+        if direction != (0, 0):
+            new_head = (snake[0][0]+direction[0], snake[0][1]+direction[1])
+            if new_head in snake or not (0 <= new_head[0] < WIDTH and 0 <= new_head[1] < HEIGHT):
+                break
+            snake.insert(0, new_head)
+            if new_head == food:
+                food = (random.randrange(0, WIDTH, block), random.randrange(0, HEIGHT, block))
+                score += 1
+            else:
+                snake.pop()
 
-def snake():
-    print(ascii_banner("Snake", Fore.YELLOW))
-    print("Move around, eat food, grow longer, die if you hit walls or yourself.")
-    input("Press Enter to return to the game panel...")
+        screen.fill((0,0,0))
+        for s in snake: pygame.draw.rect(screen, (0,255,0), (*s, block, block))
+        pygame.draw.rect(screen, (255,0,0), (*food, block, block))
+        pygame.display.flip()
 
-def tetris():
-    print(ascii_banner("Tetris", Fore.MAGENTA))
-    print("Falling blocks, rotate with keys, clear lines, classic fun!")
-    input("Press Enter to return to the game panel...")
+    pygame.quit()
 
-def minesweeper():
-    print(ascii_banner("Minesweeper", Fore.RED))
-    print("Grid of numbers and mines. Flag mines and uncover tiles.")
-    input("Press Enter to return to the game panel...")
+def battleship_game():
+    pygame.init()
+    WIDTH, HEIGHT = 600, 600
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Battleship")
+    clock = pygame.time.Clock()
 
-def hangman():
-    print(ascii_banner("Hangman", Fore.GREEN))
-    print("Guess letters of a hidden word. Easy to scale difficulty.")
-    input("Press Enter to return to the game panel...")
+    grid_size = 10
+    cell = WIDTH // grid_size
+    ship = [(random.randint(0,9), random.randint(0,9))]
+    hits = []
+
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((0,0,64))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                gx, gy = x//cell, y//cell
+                if (gx, gy) in ship: hits.append((gx,gy))
+
+        for i in range(grid_size):
+            for j in range(grid_size):
+                rect = pygame.Rect(i*cell, j*cell, cell, cell)
+                pygame.draw.rect(screen, (0,128,128), rect, 1)
+                if (i,j) in hits: pygame.draw.rect(screen, (255,0,0), rect)
+        pygame.display.flip()
+        clock.tick(30)
+
+    pygame.quit()
+
+def tetris_game():
+    pygame.init()
+    WIDTH, HEIGHT = 200, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Tetris")
+    clock = pygame.time.Clock()
+
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((0,0,0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Tetris Placeholder", True, (255,255,255))
+        screen.blit(text, (20, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+
+    pygame.quit()
+
+def minesweeper_game():
+    pygame.init()
+    WIDTH, HEIGHT = 400, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Minesweeper")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 24)
+    running = True
+    while running:
+        screen.fill((192,192,192))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Minesweeper Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+    pygame.quit()
+
+def hangman_game():
+    pygame.init()
+    WIDTH, HEIGHT = 400, 300
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Hangman")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 36)
+    running = True
+    while running:
+        screen.fill((255,255,255))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("Hangman Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
+    pygame.quit()
 
 def game_2048():
-    print(ascii_banner("2048", Fore.BLUE))
-    print("Merge numbers on a grid using arrow keys. Fun in ASCII!")
-    input("Press Enter to return to the game panel...")
+    pygame.init()
+    WIDTH, HEIGHT = 400, 400
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("2048")
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 36)
+    running = True
+    while running:
+        screen.fill((255,255,255))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: running = False
+        text = font.render("2048 Placeholder", True, (0,0,0))
+        screen.blit(text, (50, HEIGHT//2))
+        pygame.display.flip()
+        clock.tick(30)
 
-# -------------------- Control Panel --------------------
+# -------------------- GAME PANEL --------------------
+def launch_game_panel():
+    print(ascii_banner("Games [V2]"))
+    print("[1] Snake")
+    print("[2] Battleship")
+    print("[3] Tetris")
+    print("[4] Minesweeper")
+    print("[5] Hangman")
+    print("[6] 2048")
+
+    choice = input("Select a game: ").strip()
+    if choice=='1': snake_game()
+    elif choice=='2': battleship_game()
+    elif choice=='3': tetris_game()
+    elif choice=='4': minesweeper_game()
+    elif choice=='5': hangman_game()
+    elif choice=='6': game_2048()
+    else: print("Unknown choice")
+
+# -------------------- CONTROL PANEL --------------------
 def show_panel():
     print(ascii_banner("PANEL"))
     print(Fore.LIGHTBLUE_EX + "A general control panel for apps\n")
@@ -120,7 +221,7 @@ def show_panel():
         print(Fore.GREEN + f"[{key}]" + Style.RESET_ALL + f" - {desc}")
     print()
 
-    tree_text = r""" ... """  # keep existing tree if needed
+    tree_text = r""" ... """
 
     while True:
         choice = input("Choice: ").strip().upper()
@@ -147,7 +248,7 @@ def show_panel():
             except Exception as e:
                 print(f"Failed to run {desc}: {e}")
 
-# -------------------- Package Refresh --------------------
+# -------------------- PACKAGE REFRESH --------------------
 def refresh_package():
     try:
         import zenpo
@@ -159,7 +260,17 @@ def refresh_package():
     except Exception as e:
         print(f"Failed to refresh Zenpo: {e}")
 
-# -------------------- Main --------------------
+# -------------------- MAIN --------------------
+def show_main():
+    print(ascii_banner("Zenpo"))
+    print(Fore.GREEN + f"Creator: {CREATOR}")
+    print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
+    print(Fore.BLUE + f"Version: {VERSION}\n")
+    print(Style.BRIGHT + "Help:")
+    print("        zenpo -p\tShow panel with apps to open")
+    print("        zenpo -refresh\tUpdate Zenpo to latest GitHub version")
+    print("        zenpo\tShow this text")
+
 def main():
     parser = argparse.ArgumentParser(prog="zenpo", add_help=False)
     parser.add_argument("-p", action="store_true", help="Show panel with apps to open")
