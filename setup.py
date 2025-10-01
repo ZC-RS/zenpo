@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="zenpo",
-    version="1.2.6",
+    version="2.0.0",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
