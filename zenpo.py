@@ -27,12 +27,12 @@ def show_main():
     print("  zenpo\tShow this text")
 
 def launch_game_panel():
-    print(ascii_banner("Games [BETA]"))
-    print(Fore.BLUE + Style.BRIGHT + "Version 1\n")
+    print(ascii_banner("Games V1"))
+    print(Fore.BLUE + Style.BRIGHT + "Version 1.0 - Script by a00137\n")
     print("A game console in the terminal for students to play without a history :)\n")
     print("[S] Space Shooting Game 🚀 [W.I.P]")
     print("[A] Among Us [SUS]")
-    print("[I] Interactive Chat 💬 [ALPHA]\n")
+    print("[I] Interactive Chat 💬 [ALPHA]; Chat with other people on your network, using zenpo!\n")
 
     choice = input("Choice: ").strip().lower()
     if choice == "s":
@@ -110,7 +110,7 @@ def show_panel():
     print("Press different keys to open apps:\n")
 
     hotkeys = {
-        "GM": ("Interactive Game Mode [BOLD][BETA]", None),
+        "GM": ("Interactive Game Mode [BETA]", None),
         "X": ("Exit the panel", None),
         "T": ("Open Task Manager", ["taskmgr"]),
         "C": ("Open CMD", ["cmd"]),
